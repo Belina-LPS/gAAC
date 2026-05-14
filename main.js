@@ -4,9 +4,9 @@
 //          ##################### NOTES #####################
 // #######################################################################
 
-  // file has become another member of the objects in the files arrays
-  // update all functions at top of code to account for this
-  // gl
+  // next steps:
+  // implement the rest of expletives in DECtalk,
+  // implement what other sound files we did
   
 function do_nothing_help_me_upload_sound_lol() {
   playSound("");
@@ -21,7 +21,7 @@ function do_nothing_help_me_upload_sound_lol() {
 // #######################################################################
 
 // list of screen nicknames
-var scrns = ["mm", "ex"];
+var scrns = ["mm", "ex", "v1", "v2"];
 
 // Currently selected voice
 // Options: DECtalk
@@ -42,10 +42,50 @@ var fileQueue = [];
 var durQueue = [];
 
 // array of soundfile objects with a name and duration in ms
+// sorted by filename, ascending
 // DECtalk
+// {word: "", file: "_DECtalk", dur: },
 var soundfiles_DECtalk = [
+  {word: "am", file: "am_DECtalk.mp3", dur: 766},
+  {word: "are", file: "are_DECtalk.mp3", dur: 876},
+  {word: "be", file: "be_DECtalk.mp3", dur: 857},
+  {word: "boo", file: "boo_DECtalk.mp3", dur: 902},
+  {word: "close", file: "close_DECtalk.mp3", dur: 1045},
+  {word: "come", file: "come_DECtalk.mp3", dur: 883},
+  {word: "damn", file: "dmn_DECtalk.mp3", dur: 985},
+  {word: "drink", file: "drink_DECtalk.mp3", dur: 1050},
+  {word: "eat", file: "eat_DECtalk.mp3", dur: 805},
+  {word: "fuck", file: "fck_DECtalk.mp3", dur: 927},
+  {word: "fucking", file: "fcking_DECtalk.mp3", dur : 1043},
+  {word: "get", file: "get_DECtalk.mp3", dur: 831},
+  {word: "give", file: "give_DECtalk.mp3", dur: 883},
+  {word: "go", file: "go_DECtalk.mp3", dur: 844},
+  {word: "have", file: "have_DECtalk.mp3", dur: 882},
+  {word: "help", file: "help_DECtalk.mp3", dur: 953},
   {word: "hi", file: "hi_DECtalk.mp3", dur: 940},
+  {word: "hide", file: "hide_DECtalk.mp3", dur: 1063},
+  {word: "is", file: "is_DECtalk.mp3", dur: 934},
+  {word: "make", file: "make_DECtalk.mp3", dur: 951},
+  {word: "need", file: "need_DECtalk.mp3", dur: 992},
+  {word: "open", file: "open_DECtalk.mp3", dur: 966},
+  {word: "ow", file: "ow_DECtalk.mp3", dur: 902},
+  {word: "pause", file: "pause_DECtalk.mp3", dur: 1146},
+  {word: "put", file: "put_DECtalk.mp3", dur: 953},
+  {word: "show", file: "show_DECtalk.mp3", dur: 998},
+  {word: "shit", file: "sht_DECtalk.mp3", dur: 934},
+  {word: "spook", file: "spook_DECtalk.mp3", dur: 1082},
+  {word: "stay", file: "stay_DECtalk.mp3", dur: 1030},
+  {word: "stop", file: "stop_DECtalk.mp3", dur: 1114},
   {word: "to", file: "to_DECtalk.mp3", dur: 934},
+  {word: "touch", file: "touch_DECtalk.mp3", dur: 1030},
+  {word: "turn", file: "turn_DECtalk.mp3", dur: 979},
+  {word: "uhh", file: "uhh_DECtalk.mp3", dur: 788},
+  {word: "understand", file: "understand_DECtalk.mp3", dur: 1288},
+  {word: "use", file: "use_DECtalk.mp3", dur: 921},
+  {word: "wait", file: "wait_DECtalk.mp3", dur: 966},
+  {word: "want", file: "want_DECtalk.mp3", dur: 934},
+  {word: "will", file: "will_DECtalk.mp3", dur: 908},
+  {word: "yippee", file: "yippee_DECtalk.mp3", dur:1050}
   ];
 
 
@@ -95,6 +135,7 @@ function find(value) {
 // find value in sorted list
 // returns index in list
 function find_2(list, value) {
+  console.log("find2: looking for " + value);
   var start = 0;
   var end = list.length-1;
   while (start <= end) {
@@ -104,9 +145,11 @@ function find_2(list, value) {
       return mid;
     }
     else if (list[mid].file < value) {
+      console.log(list[mid].file + " < " + value);
       start = mid+1;
     }
     else {
+      console.log(list[mid].file + " > " + value);
       end = mid-1;
     }
   }
@@ -149,6 +192,7 @@ function append_word(word, f) {
   if (f == undefined) {
     f = word;
   }
+  console.log("Playing sound "+f+"_"+voice+".mp3");
   playSound(f+"_"+voice+".mp3");
   
   // find index of word in voice array
@@ -165,9 +209,11 @@ function append_word(word, f) {
 
 // speak the queue of words
 function say_queue() {
+  form_sentence_and_update();
+  
   for (var i=0; i<wordQueue.length; i++) {
     playSound(fileQueue[i]);
-    wait(durQueue[i]-100); // BEWARE this -100
+    wait(durQueue[i]-500); // BEWARE this number
     // see if breathe needs to be added
   }
 }
@@ -290,6 +336,7 @@ onEvent("mm_people", "click", function( ) {
 onEvent("mm_expletives", "click", function( ) {
   // switch screen to expletives screen
   console.log("mm -> ex");
+  form_sentence_and_update();
   setScreen("expletives");
 });
 
@@ -298,6 +345,19 @@ onEvent("mm_to", "click", function() {
   append_word("to");
 });
 
+onEvent("mm_verbs1", "click", function( ) {
+  // switch screen to expletives screen
+  console.log("mm -> v1");
+  form_sentence_and_update();
+  setScreen("verbs1");
+});
+
+onEvent("mm_verbs2", "click", function( ) {
+  // switch screen to expletives screen
+  console.log("mm -> v2");
+  form_sentence_and_update();
+  setScreen("verbs2");
+});
 
 
 
@@ -312,6 +372,7 @@ onEvent("mm_to", "click", function() {
 onEvent("ex_home", "click", function( ) {
   // switch screen to main menu
   console.log("ex -> mm");
+  form_sentence_and_update();
   setScreen("mainMenu");
 });
 
@@ -353,6 +414,268 @@ onEvent("ex_confirm_delY", "click", function( ) {
 
 // ################ GRID ################
 
+onEvent("ex_boo", "click", function() {
+  append_word("boo");
+});
+
+onEvent("ex_damn", "click", function() {
+  append_word("damn", "dmn");
+});
+
+onEvent("ex_fuck", "click", function() {
+  append_word("fuck", "fck");
+});
+
+onEvent("ex_fucking", "click", function() {
+  append_word("fucking", "fcking");
+});
+
 onEvent("ex_hi", "click", function() {
   append_word("hi");
 });
+
+onEvent("ex_ow", "click", function() {
+  append_word("ow");
+});
+
+onEvent("ex_shit", "click", function() {
+  append_word("shit", "sht");
+});
+
+onEvent("ex_uhh", "click", function() {
+  append_word("uhh");
+});
+
+onEvent("ex_yippee", "click", function() {
+  append_word("yippee");
+});
+
+
+
+
+// #######################################################################
+//          ##################### VERBS 2 #####################
+// #######################################################################
+
+// ################ TOOLBAR ################
+
+onEvent("v2_home", "click", function( ) {
+  // switch screen to main menu
+  console.log("v2 -> mm");
+  form_sentence_and_update();
+  setScreen("mainMenu");
+});
+
+onEvent("v2_voice", "click", function( ) {
+  // cycle voice
+  console.log("V2: Cycle voice");
+});
+
+onEvent("v2_play", "click", function( ) {
+  // play queue
+  console.log("V2: Play");
+  say_queue();
+});
+
+onEvent("v2_backspace", "click", function( ) {
+  // remove last item in queue
+  console.log("V2: Backspace");
+  backspace();
+});
+
+onEvent("v2_delete", "click", function( ) {
+  // delete entire queue
+  console.log("V2: Confirming deletion of queue");
+  open_confirm_popup("v2");
+});
+
+onEvent("v2_confirm_delN", "click", function( ) {
+  // close the popup and do nothing
+  close_confirm_popup("v2");
+});
+
+onEvent("v2_confirm_delY", "click", function( ) {
+  // close the popup and delete the queues
+  console.log("V2: clearing queues");
+  delete_sentence();
+  close_confirm_popup("v2");
+});
+
+
+// ################ GRID ################
+
+onEvent("v2_close", "click", function() {
+  append_word("close");
+});
+
+onEvent("v2_come", "click", function() {
+  append_word("come");
+});
+
+onEvent("v2_get", "click", function() {
+  append_word("get");
+});
+
+onEvent("v2_give", "click", function() {
+  append_word("give");
+});
+
+onEvent("v2_hide", "click", function() {
+  append_word("hide");
+});
+
+onEvent("v2_open", "click", function() {
+  append_word("open");
+});
+
+onEvent("v2_put", "click", function() {
+  append_word("put");
+});
+
+onEvent("v2_show", "click", function() {
+  append_word("show");
+});
+
+onEvent("v2_spook", "click", function() {
+  append_word("spook");
+});
+
+onEvent("v2_stay", "click", function() {
+  append_word("stay");
+});
+
+onEvent("v2_touch", "click", function() {
+  append_word("touch");
+});
+
+onEvent("v2_turn", "click", function() {
+  append_word("turn");
+});
+
+onEvent("v2_use", "click", function() {
+  append_word("use");
+});
+
+onEvent("v2_wait", "click", function() {
+  append_word("wait");
+});
+
+
+
+// #######################################################################
+//          ##################### VERBS 2 #####################
+// #######################################################################
+
+// ################ TOOLBAR ################
+
+onEvent("v1_home", "click", function( ) {
+  // switch screen to main menu
+  console.log("v1 -> mm");
+  form_sentence_and_update();
+  setScreen("mainMenu");
+});
+
+onEvent("v1_voice", "click", function( ) {
+  // cycle voice
+  console.log("V1: Cycle voice");
+});
+
+onEvent("v1_play", "click", function( ) {
+  // play queue
+  console.log("V1: Play");
+  say_queue();
+});
+
+onEvent("v1_backspace", "click", function( ) {
+  // remove last item in queue
+  console.log("V1: Backspace");
+  backspace();
+});
+
+onEvent("v1_delete", "click", function( ) {
+  // delete entire queue
+  console.log("V1: Confirming deletion of queue");
+  open_confirm_popup("v1");
+});
+
+onEvent("v1_confirm_delN", "click", function( ) {
+  // close the popup and do nothing
+  close_confirm_popup("v1");
+});
+
+onEvent("v1_confirm_delY", "click", function( ) {
+  // close the popup and delete the queues
+  console.log("V1: clearing queues");
+  delete_sentence();
+  close_confirm_popup("v1");
+});
+
+
+// ################ GRID ################
+
+onEvent("v1_am", "click", function() {
+  append_word("am");
+});
+
+onEvent("v1_are", "click", function() {
+  append_word("are");
+});
+
+onEvent("v1_be", "click", function() {
+  append_word("be");
+});
+
+onEvent("v1_drink", "click", function() {
+  append_word("drink");
+});
+
+onEvent("v1_eat", "click", function() {
+  append_word("eat");
+});
+
+onEvent("v1_go", "click", function() {
+  append_word("go");
+});
+
+onEvent("v1_have", "click", function() {
+  append_word("have");
+});
+
+onEvent("v1_help", "click", function() {
+  append_word("help");
+});
+
+onEvent("v1_is", "click", function() {
+  append_word("is");
+});
+
+onEvent("v1_make", "click", function() {
+  append_word("make");
+});
+
+onEvent("v1_need", "click", function() {
+  append_word("need");
+});
+
+onEvent("v1_pause", "click", function() {
+  append_word("pause");
+});
+
+onEvent("v1_stop", "click", function() {
+  append_word("stop");
+});
+
+onEvent("v1_understand", "click", function() {
+  append_word("understand");
+});
+
+onEvent("v1_want", "click", function() {
+  append_word("want");
+});
+
+onEvent("v1_will", "click", function() {
+  append_word("will");
+});
+
+
+
