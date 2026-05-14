@@ -8,6 +8,14 @@
   // update all functions at top of code to account for this
   // gl
 
+
+// ###########################################################################################################
+// ###########################################################################################################
+  
+// #######################################################################
+//       ##################### GLOBAL VARIABLES ################
+// #######################################################################
+
 // list of screen nicknames
 var scrns = ["mm"];
 
@@ -17,13 +25,31 @@ var voice = "DECtalk";
 
 // queue of words; will be displayed in text box above at all times
 // eg. I NEED WATER
-var sayQueue = [];
+var wordQueue = [];
 
+// queue of filenames
+// i don't want the program creating filenames from words and voice while trying to output them;
+  // code.org is.. quite slow
+// eg. i_DECtalk.wav need_DECtalk.wav water_DECtalk.wav
 var fileQueue = [];
 
 // queue of the durations of those soundfiles in ms
 // eg. 500 600 1800
 var durQueue = [];
+
+// array of soundfile objects with a name and duration in ms
+// DECtalk
+var soundfiles_DECtalk = [
+  {word: "to", file: "to_DECtalk.mp3", dur: 934},
+  ];
+
+
+// ###########################################################################################################
+// ###########################################################################################################
+
+// #######################################################################
+//        ##################### FUNCTIONS #####################
+// #######################################################################
 
 
 // wait a certain number of milliseconds.
@@ -51,7 +77,7 @@ function breathe() {
 
 // decide which array to look in and call find() function
 function find(value) {
-  value += "_" + voice;
+  value += "_" + voice + ".mp3";
   if (voice == "DECtalk") {
     return find_2(soundfiles_DECtalk, value);
   }
@@ -68,11 +94,11 @@ function find_2(list, value) {
   var end = list.length-1;
   while (start <= end) {
     var mid = Math.floor((start+end)/2);
-    if (list[mid].name == value) {
+    if (list[mid].file == value) {
       console.log(value + " found at i=" + mid);
       return mid;
     }
-    else if (list[mid].name < value) {
+    else if (list[mid].file < value) {
       start = mid+1;
     }
     else {
@@ -84,18 +110,17 @@ function find_2(list, value) {
 }
 
 
-// takes in an index value and returns soundfile
+// takes in an index value and returns filename
 // from current voice value
-function find_say(i) {
+function find_filename(i) {
   if (voice == "DECtalk") {
-    return soundfiles_DECtalk[i].name;
+    return soundfiles_DECtalk[i].file;
   }
   else {
     console.log("######## VOICE ARRAY DOESN'T EXIST ########");
     return -1;
   }
 }
-
 
 // takes in an index value and returns duration
 // from current voice value
@@ -109,18 +134,34 @@ function find_dur(i) {
   }
 }
 
-// adds a word to the queue
-function add_word(word) {
-  var i = find(word);
-  appendItem(sayQueue, find_say(i));
+
+
+// append a word to the queue
+// word: the word to append
+// f: the filename of the word if it is a homophone (eg. word = "too", file = "to")
+function append_word(word, f) {
+  
+  if (f == undefined) {
+    f = word;
+  }
+  playSound(f+"_"+voice+".mp3");
+  
+  // find index of word in voice array
+  var i = find(f);
+  // append word, duration, and filename to wordQueue, fileQueue, and durQueue
+  appendItem(wordQueue, word);
+  appendItem(fileQueue, find_filename(i));
   appendItem(durQueue, find_dur(i));
   
+  
+  
+  // create sentence
   var sentence = "";
   var j = 0;
-  for (j; j<sayQueue.length-1; j++) {
-    sentence += sayQueue[j] + " ";
+  for (j; j<wordQueue.length-1; j++) {
+    sentence += wordQueue[j] + " ";
   }
-  sentence += sayQueue[j];
+  sentence += wordQueue[j];
   
   // iterate through array of screen nicknames,
   // change all "speak" textboxes,
@@ -134,8 +175,12 @@ function add_word(word) {
 
 
 // speak the queue of words
-function sayQueue() {
-  
+function say_queue() {
+  for (var i=0; i<wordQueue.length; i++) {
+    playSound(fileQueue[i]);
+    wait(durQueue[i]);
+    // see if breathe needs to be added
+  }
 }
 
 
@@ -153,21 +198,26 @@ function close_confirm_popup(scrn) {
   setProperty(scrn+"_confirm_delN", "hidden", true);
 }
 
-// delete contents of sayQueue and durQueue
-function clearQueues() {
+// deletes the current sentence
+// clears wordQueue, fileQueue, and durQueue and resets all speak textboxes
+function delete_sentence() {
+  // clear contents of wordQueue, fileQueue, and durQueue
   // this method may not work. check again in debugging
-  sayQueue = [];
+  wordQueue = [];
+  fileQueue = [];
   durQueue = [];
+  
+  // iterate through screens, clear all speak boxes
+  for (var k=0; k<scrns.length; k++) {
+    setProperty(scrns[k]+"_speak", "text", "");
+  }
 }
 
 
-// array of soundfile objects with a name and duration in ms
-// DECtalk
-var soundfiles_DECtalk = [
-  {word: "to", filename: "to_DECtalk", dur: 1000}, // duration wrong on this one! placeholder!
-  ];
+
   
-  
+// ###########################################################################################################
+// ###########################################################################################################
   
 // #######################################################################
 //          ##################### MAIN MENU #####################
@@ -183,13 +233,13 @@ onEvent("mm_voice", "click", function( ) {
 onEvent("mm_play", "click", function( ) {
   // play queue
   console.log("MM: Play queue");
-  sayQueue();
+  say_queue();
 });
 
 onEvent("mm_backspace", "click", function( ) {
   // remove last item in queue
   console.log("MM: Removing last items in sayQueue and durQueue");
-  sayQueue.pop(); // we'll see if this works
+  wordQueue.pop(); // we'll see if this works
   durQueue.pop();
 });
 
@@ -207,7 +257,7 @@ onEvent("mm_confirm_delN", "click", function( ) {
 onEvent("mm_confirm_delY", "click", function( ) {
   // close the popup and delete the queues
   console.log("MM: clearing queues");
-  clearQueues();
+  delete_sentence();
   close_confirm_popup("mm");
 });
 
@@ -221,5 +271,5 @@ onEvent("mm_people", "click", function( ) {
 });
 
 onEvent("mm_to", "click", function() {
-  add_word("to");
+  append_word("to");
 });
