@@ -7,6 +7,10 @@
   // file has become another member of the objects in the files arrays
   // update all functions at top of code to account for this
   // gl
+  
+function do_nothing_help_me_upload_sound_lol() {
+  playSound("");
+}
 
 
 // ###########################################################################################################
@@ -17,7 +21,7 @@
 // #######################################################################
 
 // list of screen nicknames
-var scrns = ["mm"];
+var scrns = ["mm", "ex"];
 
 // Currently selected voice
 // Options: DECtalk
@@ -40,6 +44,7 @@ var durQueue = [];
 // array of soundfile objects with a name and duration in ms
 // DECtalk
 var soundfiles_DECtalk = [
+  {word: "hi", file: "hi_DECtalk.mp3", dur: 940},
   {word: "to", file: "to_DECtalk.mp3", dur: 934},
   ];
 
@@ -153,24 +158,8 @@ function append_word(word, f) {
   appendItem(fileQueue, find_filename(i));
   appendItem(durQueue, find_dur(i));
   
-  
-  
-  // create sentence
-  var sentence = "";
-  var j = 0;
-  for (j; j<wordQueue.length-1; j++) {
-    sentence += wordQueue[j] + " ";
-  }
-  sentence += wordQueue[j];
-  
-  // iterate through array of screen nicknames,
-  // change all "speak" textboxes,
-  // eg. mm_speak (scrn+"_speak")
-  // don't forget spaces btwn words
-  for (var k=0; k<scrns.length; k++) {
-    setProperty(scrns[k]+"_speak", "text", sentence);
-  }
-  
+  // form sentence and update speak boxes
+  form_sentence_and_update();
 }
 
 
@@ -178,7 +167,7 @@ function append_word(word, f) {
 function say_queue() {
   for (var i=0; i<wordQueue.length; i++) {
     playSound(fileQueue[i]);
-    wait(durQueue[i]);
+    wait(durQueue[i]-100); // BEWARE this -100
     // see if breathe needs to be added
   }
 }
@@ -198,6 +187,16 @@ function close_confirm_popup(scrn) {
   setProperty(scrn+"_confirm_delN", "hidden", true);
 }
 
+// remove the last word from the sentence
+function backspace() {
+  // remove back element of each array
+  wordQueue.pop();
+  fileQueue.pop();
+  durQueue.pop();
+  
+  form_sentence_and_update();
+}
+
 // deletes the current sentence
 // clears wordQueue, fileQueue, and durQueue and resets all speak textboxes
 function delete_sentence() {
@@ -213,6 +212,24 @@ function delete_sentence() {
   }
 }
 
+// form sentence from wordQueue and update speak textboxes
+function form_sentence_and_update() {
+  // create sentence
+  var sentence = "";
+  var j = 0;
+  for (j; j<wordQueue.length-1; j++) {
+    sentence += wordQueue[j] + " ";
+  }
+  sentence += wordQueue[j];
+  
+  if (wordQueue.length == 0) {
+    sentence = "";
+  }
+
+  for (var k=0; k<scrns.length; k++) {
+    setProperty(scrns[k]+"_speak", "text", sentence);
+  }
+}
 
 
   
@@ -232,15 +249,14 @@ onEvent("mm_voice", "click", function( ) {
 
 onEvent("mm_play", "click", function( ) {
   // play queue
-  console.log("MM: Play queue");
+  console.log("MM: Play");
   say_queue();
 });
 
 onEvent("mm_backspace", "click", function( ) {
   // remove last item in queue
-  console.log("MM: Removing last items in sayQueue and durQueue");
-  wordQueue.pop(); // we'll see if this works
-  durQueue.pop();
+  console.log("MM: Backspace");
+  backspace();
 });
 
 onEvent("mm_delete", "click", function( ) {
@@ -270,6 +286,73 @@ onEvent("mm_people", "click", function( ) {
   console.log("mm -> people/animals");
 });
 
+
+onEvent("mm_expletives", "click", function( ) {
+  // switch screen to expletives screen
+  console.log("mm -> ex");
+  setScreen("expletives");
+});
+
+
 onEvent("mm_to", "click", function() {
   append_word("to");
+});
+
+
+
+
+
+  
+// #######################################################################
+//          ##################### EXPLETIVES #####################
+// #######################################################################
+
+// ################ TOOLBAR ################
+
+onEvent("ex_home", "click", function( ) {
+  // switch screen to main menu
+  console.log("ex -> mm");
+  setScreen("mainMenu");
+});
+
+onEvent("ex_voice", "click", function( ) {
+  // cycle voice
+  console.log("Ex: Cycle voice");
+});
+
+onEvent("ex_play", "click", function( ) {
+  // play queue
+  console.log("Ex: Play");
+  say_queue();
+});
+
+onEvent("ex_backspace", "click", function( ) {
+  // remove last item in queue
+  console.log("Ex: Backspace");
+  backspace();
+});
+
+onEvent("ex_delete", "click", function( ) {
+  // delete entire queue
+  console.log("Ex: Confirming deletion of queue");
+  open_confirm_popup("ex");
+});
+
+onEvent("ex_confirm_delN", "click", function( ) {
+  // close the popup and do nothing
+  close_confirm_popup("ex");
+});
+
+onEvent("ex_confirm_delY", "click", function( ) {
+  // close the popup and delete the queues
+  console.log("Ex: clearing queues");
+  delete_sentence();
+  close_confirm_popup("ex");
+});
+
+
+// ################ GRID ################
+
+onEvent("ex_hi", "click", function() {
+  append_word("hi");
 });
