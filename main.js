@@ -4,10 +4,6 @@
 //          ##################### NOTES #####################
 // #######################################################################
 
-  // next steps:
-  // implement the rest of expletives in DECtalk,
-  // implement what other sound files we did
-  
 // M:
   // To add a new category,
     // On the left side of the screen, you'll see a preview of the program.
@@ -81,7 +77,10 @@ function do_nothing_help_me_upload_sound_lol() {
 // #######################################################################
 
 // list of screen nicknames
-var scrns = ["mm", "ex", "v1", "v2", "bd"];
+var scrns = ["mm",
+             "ex",
+             "bd", "no", "t1",
+             "v1", "v2"];
 
 // Currently selected voice
 // Options: DECtalk
@@ -106,9 +105,11 @@ var durQueue = [];
 // DECtalk
 // {word: "", file: "_DECtalk", dur: },
 var soundfiles_DECtalk = [
+  {word: "affectionate", file: "affectionate_DECtalk.mp3", dur: 1262},
   {word: "am", file: "am_DECtalk.mp3", dur: 766},
   {word: "are", file: "are_DECtalk.mp3", dur: 876},
   {word: "arm", file: "arm_DECtalk.mp3", dur: 966},
+  {word: "ass", file: "azz_DECtalk.mp3", dur: 979},
   {word: "back", file: "back_DECtalk.mp3", dur: 966},
   {word: "be", file: "be_DECtalk.mp3", dur: 857},
   {word: "boo", file: "boo_DECtalk.mp3", dur: 902},
@@ -116,44 +117,68 @@ var soundfiles_DECtalk = [
   {word: "chest", file: "chest_DECtalk.mp3", dur: 1159},
   {word: "close", file: "close_DECtalk.mp3", dur: 1045},
   {word: "come", file: "come_DECtalk.mp3", dur: 883},
+  {word: "computer", file: "computer_DECtalk.mp3", dur: 1362},
   {word: "damn", file: "dmn_DECtalk.mp3", dur: 985},
   {word: "drink", file: "drink_DECtalk.mp3", dur: 1050},
   {word: "eat", file: "eat_DECtalk.mp3", dur: 805},
+  {word: "energy", file: "energy_DECtalk.mp3", dur: 1217},
+  {word: "exclamation", file: "exclamation_DECtalk.mp3", dur: 1398},
   {word: "face", file: "face_DECtalk.mp3", dur: 1037},
   {word: "fuck", file: "fck_DECtalk.mp3", dur: 927},
   {word: "fucking", file: "fcking_DECtalk.mp3", dur : 1043},
   {word: "foot", file: "foot_DECtalk.mp3", dur: 953},
+  {word: "genuine", file: "genuine_DECtalk.mp3", dur: 1179},
   {word: "get", file: "get_DECtalk.mp3", dur: 831},
   {word: "give", file: "give_DECtalk.mp3", dur: 883},
   {word: "go", file: "go_DECtalk.mp3", dur: 844},
+  {word: "ha", file: "ha_DECtalk.mp3", dur: 940},
   {word: "hair", file: "hair_DECtalk.mp3", dur: 966},
   {word: "hand", file: "hand_DECtalk.mp3", dur: 1154},
   {word: "have", file: "have_DECtalk.mp3", dur: 882},
+  {word: "headphones", file: "headphones_DECtalk.mp3", dur: 1397},
   {word: "help", file: "help_DECtalk.mp3", dur: 953},
   {word: "hi", file: "hi_DECtalk.mp3", dur: 940},
   {word: "hide", file: "hide_DECtalk.mp3", dur: 1063},
+  {word: "hip", file: "hip_DECtalk.mp3", dur: 914},
+  {word: "humorous", file: "humorous_DECtalk.mp3", dur: 1275},
   {word: "eye", file: "i_DECtalk.mp3", dur: 892},
   {word: "i", file: "i_DECtalk.mp3", dur: 892},
   {word: "is", file: "is_DECtalk.mp3", dur: 934},
+  {word: "joking", file: "joking_DECtalk.mp3", dur: 1094},
   {word: "leg", file: "leg_DECtalk.mp3", dur: 992},
   {word: "make", file: "make_DECtalk.mp3", dur: 951},
+  ({word: "meds", file: "mds_DECtalk.mp3", dur: 1004}),
   {word: "mouth", file: "mouth_DECtalk.mp3", dur: 1030},
   {word: "nail", file: "nail_DECtalk.mp3", dur: 927},
   {word: "need", file: "need_DECtalk.mp3", dur: 992},
+  {word: "negative", file: "negative_DECtalk.mp3", dur: 1282},
+  {word: "neutral", file: "neutral_DECtalk.mp3", dur: 1133},
   {word: "nose", file: "nose_DECtalk.mp3", dur: 1076},
   {word: "open", file: "open_DECtalk.mp3", dur: 966},
   {word: "ow", file: "ow_DECtalk.mp3", dur: 902},
   {word: "pause", file: "pause_DECtalk.mp3", dur: 1146},
   {word: "period", file: "period_DECtalk.mp3", dur: 1275},
+  {word: "plant", file: "plant_DECtalk.mp3", dur: 1146},
+  {word: "please", file: "please_DECtalk.mp3", dur: 1017},
+  {word: "positive", file: "positive_DECtalk.mp3", dur: 1384},
   {word: "put", file: "put_DECtalk.mp3", dur: 953},
+  {word: "question", file: "question_DECtalk.mp3", dur: 1326},
+  {word: "sarcasm", file: "sarcasm_DECtalk.mp3", dur: 1429},
+  {word: "serious", file: "serious_DECtalk.mp3", dur: 1249},
   {word: "show", file: "show_DECtalk.mp3", dur: 998},
   {word: "shit", file: "sht_DECtalk.mp3", dur: 934},
+  {word: "slash", file: "slash_DECtalk.mp3", dur: 1107},
+  {word: "sorry", file: "sorry_DECtalk.mp3", dur: 1069},
   {word: "spook", file: "spook_DECtalk.mp3", dur: 1082},
   {word: "stay", file: "stay_DECtalk.mp3", dur: 1030},
   {word: "stomach", file: "stomach_DECtalk.mp3", dur: 1146},
   {word: "stop", file: "stop_DECtalk.mp3", dur: 1114},
+  {word: "tablet", file: "tablet_DECtalk.mp3", dur: 1146},
+  {word: "thank", file: "thank_DECtalk.mp3", dur: 927},
   {word: "to", file: "to_DECtalk.mp3", dur: 934},
+  {word: "tool", file: "tool_DECtalk.mp3", dur: 947},
   {word: "touch", file: "touch_DECtalk.mp3", dur: 1030},
+  {word: "towel", file: "towel_DECtalk.mp3", dur: 1095},
   {word: "turn", file: "turn_DECtalk.mp3", dur: 979},
   {word: "uhh", file: "uhh_DECtalk.mp3", dur: 788},
   {word: "understand", file: "understand_DECtalk.mp3", dur: 1288},
@@ -161,6 +186,7 @@ var soundfiles_DECtalk = [
   {word: "wah", file: "wah_DECtalk.mp3", dur: 927},
   {word: "wait", file: "wait_DECtalk.mp3", dur: 966},
   {word: "want", file: "want_DECtalk.mp3", dur: 934},
+  {word: "weather", file: "weather_DECtalk.mp3", dur: 1056},
   {word: "will", file: "will_DECtalk.mp3", dur: 908},
   {word: "yeah", file: "yeah_DECtalk.mp3", dur: 966},
   {word: "yippee", file: "yippee_DECtalk.mp3", dur:1050}
@@ -429,6 +455,20 @@ onEvent("mm_body", "click", function( ) {
   setScreen("body");
 });
 
+onEvent("mm_nouns", "click", function( ) {
+  // switch screen to expletives screen
+  console.log("mm -> no");
+  form_sentence_and_update();
+  setScreen("nouns");
+});
+
+onEvent("mm_tones", "click", function( ) {
+  // switch screen to expletives screen
+  console.log("mm -> t1");
+  form_sentence_and_update();
+  setScreen("tones1");
+});
+
 onEvent("mm_verbs1", "click", function( ) {
   // switch screen to expletives screen
   console.log("mm -> v1");
@@ -518,6 +558,10 @@ onEvent("ex_hi", "click", function() {
   append_word("hi");
 });
 
+onEvent("ex_ha", "click", function() {
+  append_word("ha");
+});
+
 onEvent("ex_ow", "click", function() {
   append_word("ow");
 });
@@ -575,7 +619,7 @@ onEvent("bd_backspace", "click", function( ) {
 
 onEvent("bd_delete", "click", function( ) {
   // delete entire queue
-  console.log("V1: Confirming deletion of queue");
+  console.log("Bd: Confirming deletion of queue");
   open_confirm_popup("bd");
 });
 
@@ -586,7 +630,7 @@ onEvent("bd_confirm_delN", "click", function( ) {
 
 onEvent("bd_confirm_delY", "click", function( ) {
   // close the popup and delete the queues
-  console.log("V1: clearing queues");
+  console.log("Bd: clearing queues");
   delete_sentence();
   close_confirm_popup("bd");
 });
@@ -596,6 +640,10 @@ onEvent("bd_confirm_delY", "click", function( ) {
 
 onEvent("bd_arm", "click", function() {
   append_word("arm");
+});
+
+onEvent("bd_ass", "click", function() {
+  append_word("ass", "azz");
 });
 
 onEvent("bd_back", "click", function() {
@@ -626,6 +674,10 @@ onEvent("bd_hand", "click", function() {
   append_word("hand");
 });
 
+onEvent("bd_hip", "click", function() {
+  append_word("hip");
+});
+
 onEvent("bd_leg", "click", function() {
   append_word("leg");
 });
@@ -651,6 +703,205 @@ onEvent("bd_stomach", "click", function() {
 });
 
 
+
+// #######################################################################
+//          ####################### NOUNS #######################
+// #######################################################################
+
+// ################ TOOLBAR ################
+
+onEvent("no_home", "click", function( ) {
+  // switch screen to main menu
+  console.log("no -> mm");
+  form_sentence_and_update();
+  setScreen("mainMenu");
+});
+
+onEvent("no_voice", "click", function( ) {
+  // cycle voice
+  console.log("No: Cycle voice");
+});
+
+onEvent("no_play", "click", function( ) {
+  // play queue
+  console.log("No: Play");
+  say_queue();
+});
+
+onEvent("no_backspace", "click", function( ) {
+  // remove last item in queue
+  console.log("No: Backspace");
+  backspace();
+});
+
+onEvent("no_delete", "click", function( ) {
+  // delete entire queue
+  console.log("No: Confirming deletion of queue");
+  open_confirm_popup("no");
+});
+
+onEvent("no_confirm_delN", "click", function( ) {
+  // close the popup and do nothing
+  close_confirm_popup("no");
+});
+
+onEvent("no_confirm_delY", "click", function( ) {
+  // close the popup and delete the queues
+  console.log("No: clearing queues");
+  delete_sentence();
+  close_confirm_popup("no");
+});
+
+
+// ################ GRID ################
+
+onEvent("no_computer", "click", function() {
+  append_word("computer");
+});
+
+onEvent("no_energy", "click", function() {
+  append_word("energy");
+});
+
+onEvent("no_headphones", "click", function() {
+  append_word("headphones");
+});
+
+onEvent("no_meds", "click", function() {
+  append_word("meds", "mds");
+});
+
+onEvent("no_plant", "click", function() {
+  append_word("plant");
+});
+
+onEvent("no_tablet", "click", function() {
+  append_word("tablet");
+});
+
+onEvent("no_tool", "click", function() {
+  append_word("tool");
+});
+
+onEvent("no_towel", "click", function() {
+  append_word("towel");
+});
+
+onEvent("no_weather", "click", function() {
+  append_word("weather");
+});
+
+
+// #######################################################################
+//          ##################### TONES 1 #####################
+// #######################################################################
+
+// ################ TOOLBAR ################
+
+onEvent("t1_home", "click", function( ) {
+  // switch screen to main menu
+  console.log("t1 -> mm");
+  form_sentence_and_update();
+  setScreen("mainMenu");
+});
+
+onEvent("t1_voice", "click", function( ) {
+  // cycle voice
+  console.log("T1: Cycle voice");
+});
+
+onEvent("t1_play", "click", function( ) {
+  // play queue
+  console.log("T1: Play");
+  say_queue();
+});
+
+onEvent("t1_backspace", "click", function( ) {
+  // remove last item in queue
+  console.log("T1: Backspace");
+  backspace();
+});
+
+onEvent("t1_delete", "click", function( ) {
+  // delete entire queue
+  console.log("T1: Confirming deletion of queue");
+  open_confirm_popup("t1");
+});
+
+onEvent("t1_confirm_delN", "click", function( ) {
+  // close the popup and do nothing
+  close_confirm_popup("t1");
+});
+
+onEvent("t1_confirm_delY", "click", function( ) {
+  // close the popup and delete the queues
+  console.log("T1: clearing queues");
+  delete_sentence();
+  close_confirm_popup("t1");
+});
+
+
+// ################ GRID ################
+
+onEvent("t1_affectionate", "click", function() {
+  append_word("affectionate");
+});
+
+onEvent("t1_exclamation", "click", function() {
+  append_word("exclamation");
+});
+
+onEvent("t1_genuine", "click", function() {
+  append_word("genuine");
+});
+
+onEvent("t1_humorous", "click", function() {
+  append_word("humorous");
+});
+
+onEvent("t1_joking", "click", function() {
+  append_word("joking");
+});
+
+onEvent("t1_negative", "click", function() {
+  append_word("negative");
+});
+
+onEvent("t1_neutral", "click", function() {
+  append_word("neutral");
+});
+
+onEvent("t1_please", "click", function() {
+  append_word("please");
+});
+
+onEvent("t1_positive", "click", function() {
+  append_word("positive");
+});
+
+onEvent("t1_question", "click", function() {
+  append_word("question");
+});
+
+onEvent("t1_sarcasm", "click", function() {
+  append_word("sarcasm");
+});
+
+onEvent("t1_serious", "click", function() {
+  append_word("serious");
+});
+
+onEvent("t1_slash", "click", function() {
+  append_word("slash");
+});
+
+onEvent("t1_sorry", "click", function() {
+  append_word("sorry");
+});
+
+onEvent("t1_thank", "click", function() {
+  append_word("thank");
+});
 
 
 
